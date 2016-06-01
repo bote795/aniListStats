@@ -1,0 +1,23 @@
+{
+  "name": "aniListStats",
+  "version": "0.0.0",
+  "description": "anilist stat viewer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bote795/aniListStats.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bote795/aniListStats/issues"
+  },
+  "homepage": "https://github.com/bote795/aniListStats",
+  "dependencies": {
+    "browserify": "^13.0.1",
+    "nani": "^1.2.0"
+  }
+}
