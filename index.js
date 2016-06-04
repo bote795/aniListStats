@@ -22,7 +22,8 @@ function retrieveGenres(id){
 	nani.get('anime/'+id)
 	  .then(data => {
 	  	console.log(data);
-	    deferred.resolve({data});
+	  	console.log("genres", data.genres);
+	    deferred.resolve({genres: data.genres});
 	  })
 	  .catch(error => {
 	    console.log(error);
@@ -34,20 +35,16 @@ function retrieveStaff(id) {
 	var deferred = $.Deferred();
 	nani.get('anime/'+id+'/staff')
 	  .then(data => {
-	  	console.log(data);
+	  	var staff = {};
+	  	data.staff.forEach(function(staffMember){
+	  		staff[staffMember.id]= {
+	  			name_first: staffMember.name_first,
+	  			name_last: staffMember.name_last,
+	  			role: staffMember.role
+	  		};
+	  	});
+	  	console.log("staff ",staff);
 	    deferred.resolve({data});
-	  })
-	  .catch(error => {
-	    console.log(error);
-	  });
-	 return deferred.promise();	
-}
-
-function retrieveActors(id) {
-	var deferred = $.Deferred();
-	nani.get('anime/'+id+'/actors')
-	  .then(data => {
-	    deferred.resolve({genres: data.genres});
 	  })
 	  .catch(error => {
 	    console.log(error);
@@ -60,12 +57,11 @@ function checkForAnimeDetails (animeIds,callback) {
   for (var i = 0; i < animeIds.length; i++) {
     promises.push( retrieveGenres(animeIds[i]) );
     promises.push(retrieveStaff(nimeIds[i]));
-    promises.push( retrieveActors(animeIds[i]));
   };
   $.when.apply($, promises).then(function() {
     var temp=arguments; // The array of resolved objects as a pseudo-array
     callback(temp);
   });
 }
+retrieveGenres(18679);
 retrieveStaff(18679);
-retrieveActors(18679);
