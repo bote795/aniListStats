@@ -22,8 +22,7 @@ function retrieveGenres(id){
 	nani.get('anime/'+id)
 	  .then(data => {
 	  	console.log(data);
-	  	console.log("genres", data.genres);
-	    deferred.resolve({genres: data.genres});
+	    deferred.resolve({genres: data.genres , action: "genres", id: id});
 	  })
 	  .catch(error => {
 	    console.log(error);
@@ -44,7 +43,7 @@ function retrieveStaff(id) {
 	  		};
 	  	});
 	  	console.log("staff ",staff);
-	    deferred.resolve({data});
+	    deferred.resolve({staff:  staff, action: "staff", id: id});
 	  })
 	  .catch(error => {
 	    console.log(error);
@@ -52,6 +51,12 @@ function retrieveStaff(id) {
 	 return deferred.promise();	
 }
 
+/**
+ * checkForAnimeDetails creates and sends all primses
+ * @param  {array}   animeIds  an array of anime Ids
+ * @param  {Function} callback function that takes in an array of results
+ * @return {[type]}            [description]
+ */
 function checkForAnimeDetails (animeIds,callback) {
   var promises=[];
   for (var i = 0; i < animeIds.length; i++) {
@@ -62,6 +67,9 @@ function checkForAnimeDetails (animeIds,callback) {
     var temp=arguments; // The array of resolved objects as a pseudo-array
     callback(temp);
   });
+}
+function processInfo(data){
+
 }
 retrieveGenres(18679);
 retrieveStaff(18679);
