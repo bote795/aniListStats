@@ -4,7 +4,8 @@
   "description": "anilist stat viewer",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "browserify index.js -o bundle.js"
   },
   "repository": {
     "type": "git",
