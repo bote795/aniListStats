@@ -11,14 +11,19 @@ nani.get('user/'+username+'/animelist')
 function  ListsOfAnime (userData){
  var animeLists = new Map();
  var promises = [];
- var completed = userData.lists.completed;
- var dropped = userData.lists.dropped;
- var on_hold = userData.lists.on_hold;
- var watching = userData.lists.watching;
- var watchList = watching.map(function(animeItem){
- 	return animeItem.anime.id;
+ var lists = ["completed", "dropped", "on_hold", "watching"];
+ for (var i = lists.length - 1; i >= 0; i--) {
+ 	var list = [].concat.apply([], userData.lists[lists[i]]);
+ 	var watchList = list.map(function(animeItem){
+	 	return animeItem.anime.id;
+	 });
+	promises.push(checkForAnimeDetails(lists[i],watchList));
+ }
+ $.when.apply($, promises).then(function() {
+    var temp=arguments; // The array of resolved objects as a pseudo-array
+    console.log(temp)
  });
-checkForAnimeDetails("watching",watchList,processInfo);
+
 }
 //genres
 function retrieveGenres(id){
@@ -57,11 +62,12 @@ function retrieveStaff(id) {
 
 /**
  * checkForAnimeDetails creates and sends all primses
+ * @param  {string}  name      name of list
  * @param  {array}   animeIds  an array of anime Ids
- * @param  {Function} callback function that takes in an array of results
  * @return {[type]}            [description]
  */
-function checkForAnimeDetails (name,animeIds,callback) {
+function checkForAnimeDetails (name,animeIds) {
+  var deferred = $.Deferred();
   var promises=[];
   for (var i = 0; i < animeIds.length; i++) {
     promises.push( retrieveGenres(animeIds[i]) );
@@ -69,17 +75,32 @@ function checkForAnimeDetails (name,animeIds,callback) {
   };
   $.when.apply($, promises).then(function() {
     var temp=arguments; // The array of resolved objects as a pseudo-array
-    callback(name,temp);
+    processInfo(name,temp).then(function(response){
+    		deferred.resolve(response);
+    });
   });
+  return deferred.promise();
 }
 /**
- * processInfo fuse genres and staff to one item
- * @param  {[type]} data [description]
- * @return {[type]}      [description]
+ * processInfo Promise that fuses genres and staff to one item 
+ * @param  {[type]} name [name of the list]
+ * @param  {[type]} data [psudo array of resolved promosises]
+ * @return {[object]}      [object with name and a map of animes id as key and anime object with genres and staff]
+ *                         	
  */
+ /*
+ Current Anime Object
+ object in map Anime item
+ id: Number
+ Genres: Array of Strings
+ Staff: Object of key staff ids
+ 			with value as
+ 			name_first:
+  			name_last: 
+  			role: 
+  */
 function processInfo(name,data){
 	var deferred = $.Deferred();
-	console.log("Process Info", data);
 	var animeList = new Map();
 	for(var i = 0; i < data.length; i++)
 	{
