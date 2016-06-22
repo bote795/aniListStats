@@ -1,10 +1,12 @@
 var User = {
 	name: null,
 	animelist: null,
+	created_on: null,
 	init: function(name,animelist)
 	{
 		this.name = name;
 		this.animelist = animelist;
+		this.created_on = new Date();
 	},
 	load: function()
 	{
@@ -13,6 +15,7 @@ var User = {
 			var temp = StorageHelper.getKey("user");
 			this.name = temp.name;
 			this.animelist = temp.animelist;
+			this.created_on = temp.created_on;
 			return true;
 		}
 		return false;
@@ -25,7 +28,8 @@ var User = {
 	{
 		return {
 			name: this.name,
-			animelist: this.animelist
+			animelist: this.animelist,
+			created_on: this.created_on
 		};
 	}
 }
