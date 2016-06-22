@@ -1,14 +1,33 @@
 var nani = require('nani').init(auth.clientId, auth.clientSecret);
-var username = "bote795";
-nani.get('user/'+username+'/animelist')
+var genres = new Map();
+var staff = new Map();
+$( "#target" ).click(function( event ) {
+  var username = $("#username").val();
+  retrieveUser(username);
+  event.preventDefault();
+});
+function retrieveUser(username){
+ nani.get('user/'+username+'/animelist')
   .then(data => {
     console.log(data);
-    ListsOfAnime(data);
+    ListsOfAnime(data).then(function(result){
+    	console.log(result);
+    	console.log(genres);
+    	console.log(staff);
+    });
   })
   .catch(error => {
     console.log(error);
   });
+}
+//create a genre and staff maps
+function statsMaps (animeList)
+{
+}
+
+ //TODO: need to extract name, pic, desc 
 function  ListsOfAnime (userData){
+ var deferred = $.Deferred();
  var animeLists = new Map();
  var promises = [];
  var lists = ["completed", "dropped", "on_hold", "watching"];
@@ -21,9 +40,9 @@ function  ListsOfAnime (userData){
  }
  $.when.apply($, promises).then(function() {
     var temp=arguments; // The array of resolved objects as a pseudo-array
-    console.log(temp)
+    deferred.resolve(arguments);
  });
-
+ return deferred.promise();
 }
 //genres
 function retrieveGenres(id){
@@ -60,8 +79,23 @@ function retrieveStaff(id) {
 	 return deferred.promise();	
 }
 
+//page to get stuido
+//anime/{id}/page
+function retrieveStudio(id){
+	var deferred = $.Deferred();
+	nani.get('anime/'+id+"/page")
+	  .then(data => {
+	  	//console.log("retrieveGenres ",data);
+	    deferred.resolve({studios: data.studios , action: "studio", id: id});
+	  })
+	  .catch(error => {
+	    console.log(error);
+	  });
+	 return deferred.promise();
+}
+
 /**
- * checkForAnimeDetails creates and sends all primses
+ * checkForAnimeDetails Promise creates and sends all promses for that list of anime and formats it
  * @param  {string}  name      name of list
  * @param  {array}   animeIds  an array of anime Ids
  * @return {[type]}            [description]
@@ -102,11 +136,20 @@ function checkForAnimeDetails (name,animeIds) {
 function processInfo(name,data){
 	var deferred = $.Deferred();
 	var animeList = new Map();
+	var genresStats = new Map();
+	var staffStats = new Map();
 	for(var i = 0; i < data.length; i++)
 	{
 		var item = data[i];
 		switch(item.action){
 			case "genres":
+				//find frequency for each genre
+				item.genres.forEach(function(val)
+				{
+					dictAdd(genresStats,val);
+					dictAdd(genres,val);
+				});
+				//add genre staff data to anime
 				if(!animeList.has(item.id))
 				{
 					var anime = {id: item.id, genres: item.genres};
@@ -120,6 +163,13 @@ function processInfo(name,data){
 				}
 			break;
 			case "staff":
+				//find frequenc for each staff
+				Object.keys(item.staff).forEach(function(val)
+				{
+					dictAdd(staffStats, val);
+					dictAdd(staff, val);
+				});
+				//add anime staff data to anime
 				if(!animeList.has(item.id))
 				{
 					var anime = {id: item.id, staff: item.staff};
@@ -134,6 +184,27 @@ function processInfo(name,data){
 			break;
 		}
 	}
-	deferred.resolve({name: name,map: animeList});
+	deferred.resolve({name: name,map: animeList, 
+		stats: {genre: genresStats, staff: staffStats}});
 	return deferred.promise();
+}
+
+/**
+ * dictAdd adds one to value if found or adds it to map
+ * @param  {map} dictionary [a js map]
+ * @param  {[type]} val        [a value]
+ * @return {[type]}            [description]
+ */
+function dictAdd(dictionary, val)
+{
+	if(dictionary.has(val))
+	{
+		var num = dictionary.get(val);
+		num++;
+		dictionary.set(val, num);
+	}
+	else
+	{
+		dictionary.set(val,1);
+	}
 }
