@@ -10,10 +10,14 @@ $( "#target" ).click(function( event ) {
   event.preventDefault();
 });
 function retrieveUser(username){
+ if(!User.load())
  nani.get('user/'+username+'/animelist')
   .then(data => {
     console.log(data);
     ListsOfAnime(data).then(function(result){
+    	User.init(username, data);
+    	Stats.init({lists:result, genres:genres , staff:staff, studio:studio,
+    	 staffNamesMap:completeStaff, studiosNamesMap: completeStudios });
     	console.log(result);
     	console.log(genres);
     	console.log(staff);
@@ -23,6 +27,10 @@ function retrieveUser(username){
   .catch(error => {
     console.log(error);
   });
+  else
+  {
+  	console.log("load everything");
+  }
 }
 //create a genre and staff maps
 function statsMaps (animeList)
@@ -80,7 +88,6 @@ function retrieveStudio(id){
 	var deferred = $.Deferred();
 	nani.get('anime/'+id+"/page")
 	  .then(data => {
-	  	//console.log("retrieveGenres ",data);
 	    deferred.resolve({studios: data.studio , action: "studio", id: id});
 	  })
 	  .catch(error => {
@@ -233,8 +240,3 @@ function dictSave(dictionary, key, value)
 	}
 
 }
-
-retrieveStudio(18679).then(function(data)
-{
-	console.log(data);
-})
