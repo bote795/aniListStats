@@ -16,6 +16,11 @@ var User = {
 			this.name = temp.name;
 			this.animelist = temp.animelist;
 			this.created_on = temp.created_on;
+			var diff = (((new Date()).getTime() - this.created_on.getTime()) / 1000),
+			//120  = min 
+			//* 5 for five minutes
+			if(diff > (120 * 5))
+				return false;
 			return true;
 		}
 		return false;
