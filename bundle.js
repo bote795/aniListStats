@@ -89,7 +89,15 @@ function retrieveStudio(id){
 	var deferred = $.Deferred();
 	nani.get('anime/'+id+"/page")
 	  .then(data => {
-	    deferred.resolve({studios: data.studio , action: "studio", id: id});
+	  	var staff = {};
+	  	data.staff.forEach(function(staffMember){
+	  		staff[staffMember.id]= {
+	  			name_first: staffMember.name_first,
+	  			name_last: staffMember.name_last,
+	  			role: staffMember.role
+	  		};
+	  	});
+	    deferred.resolve({genres: data.genres ,staff:  staff, studios: data.studio , action: "studio", id: id});
 	  })
 	  .catch(error => {
 	    console.log(error);
@@ -107,7 +115,7 @@ function checkForAnimeDetails (name,animeIds) {
   var deferred = $.Deferred();
   var promises=[];
   for (var i = 0; i < animeIds.length; i++) {
-    promises.push( retrieveStaffAndGenres(animeIds[i]) );
+   // promises.push( retrieveStaffAndGenres(animeIds[i]) );
     promises.push( retrieveStudio(animeIds[i]));
 
   };
@@ -171,8 +179,8 @@ function processInfo(name,data){
 				anime.studios = item.studios;
 				animeList.set(item.id, anime);
 			}
-			break;
-			case "staff&genres":
+			//break;
+			//case "staff&genres":
 				//find frequency for each genre
 				item.genres.forEach(function(val)
 				{
