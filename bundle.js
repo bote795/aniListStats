@@ -30,6 +30,8 @@ function retrieveUser(username){
   });
   else
   {
+  	User.load();
+  	Stats.load();
   	console.log("load everything");
   }
 }
@@ -164,8 +166,11 @@ function processInfo(name,data){
 			//find frequency for each genre
 			item.studios.forEach(function(val)
 			{
-				dictAdd(studioStats,val.id);
-				dictAdd(studio,val.id);
+				if(val.main_studio)
+				{
+					dictAdd(studioStats,val.id);
+					dictAdd(studio,val.id);					
+				}
 				dictSave(completeStudios,val.id,val);
 			});
 			if(!animeList.has(item.id))
