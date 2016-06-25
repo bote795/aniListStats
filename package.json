@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "browserify index.js -o bundle.js"
+    "start": "browserify index.js -o bundle.js",
+    "standalone": "browserify index.js --standalone anime > bundle.js"
   },
   "repository": {
     "type": "git",

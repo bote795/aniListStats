@@ -27,13 +27,23 @@
 			<button id="target" type="submit" class="btn btn-primary">Submit</button>
 			</div>
 		</div>
+		<div id="chart"></div>
 		<!-- jQuery -->
 		<script src="http://code.jquery.com/jquery.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="auth.js"></script>
 		<script src="StorageHelper.js"></script>
 		<script src="User.js"></script>
 		<script src="Stats.js"></script>
+		<script src="PieChart.js"></script>
 		<script src="bundle.js"></script>
+		<script type="text/javascript">
+			$( "#target" ).click(function( event ) {
+			  var username = $("#username").val();
+			  window.anime(username);
+			  event.preventDefault();
+			});
+		</script>
 		<!-- Bootstrap JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	</body>

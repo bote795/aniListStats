@@ -4,11 +4,7 @@ var staff = new Map(); //map with id and staff frequency
 var completeStaff = new Map(); //map with id and staff info
 var completeStudios = new Map();
 var studio  = new Map();
-$( "#target" ).click(function( event ) {
-  var username = $("#username").val();
-  retrieveUser(username);
-  event.preventDefault();
-});
+module.exports =
 function retrieveUser(username){
  if(!User.load())
  nani.get('user/'+username+'/animelist')
@@ -33,13 +29,8 @@ function retrieveUser(username){
   	Stats.load();
   	console.log("load everything");
   }
-}
-//create a genre and staff maps
-function statsMaps (animeList)
-{
-}
+};
 
- //TODO: need to extract name, pic, desc 
 function  ListsOfAnime (userData){
  var deferred = $.Deferred();
  var animeLists = new Map();
