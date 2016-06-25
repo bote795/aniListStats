@@ -6,6 +6,7 @@ var completeStudios = new Map();
 var studio  = new Map();
 module.exports =
 function retrieveUser(username){
+ var deferred = $.Deferred();
  if(!User.load())
  nani.get('user/'+username+'/animelist')
   .then(data => {
@@ -18,6 +19,7 @@ function retrieveUser(username){
     	console.log(genres);
     	console.log(staff);
     	console.log(studio);
+    	deferred.resolve();
     });
   })
   .catch(error => {
@@ -28,7 +30,9 @@ function retrieveUser(username){
   	User.load();
   	Stats.load();
   	console.log("load everything");
+  	deferred.resolve();
   }
+   return deferred.promise();
 };
 
 function  ListsOfAnime (userData){

@@ -32,6 +32,7 @@ var Stats = {
 			var temp = StorageHelper.getKey("stats");
 			this.genres = this.jsonToMap(temp.genres);
 			this.staff = this.jsonToMap(temp.staff);
+			this.studio = this.jsonToMap(temp.studio);
 			this.staffNamesMap = this.jsonToMap(temp.staffNamesMap);
 			this.studiosNamesMap = this.jsonToMap(temp.studiosNamesMap);
 			this.lists =  temp.lists;
@@ -48,6 +49,7 @@ var Stats = {
 		return {
 			genres: [...this.genres],
 			staff: [...this.staff],
+			studio: [...this.studio],
 			staffNamesMap: [...this.staffNamesMap] ,
 			studiosNamesMap: [...this.studiosNamesMap],
 			lists: this.lists 
@@ -65,7 +67,7 @@ var Stats = {
     },
     jsonToMap: function(jsonStr) 
     {
-        return new Map(JSON.parse(jsonStr));
+        return new Map(jsonStr);
     }
 };
 
