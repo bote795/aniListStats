@@ -38,9 +38,15 @@
 		<script src="PieChart.js"></script>
 		<script src="bundle.js"></script>
 		<script type="text/javascript">
+			function formatStaffName(item)
+			{
+				return item.name_first + " " + item.name_last; //+"  :\n "+ item.role;
+			}
 			$( "#target" ).click(function( event ) {
 			  var username = $("#username").val();
 			  window.anime(username).then(function(){
+
+			  	//studio pie Chart
 			  	var studios = [];
 			  	var orderedStudios = Stats.getSortedMap("studio");
 			  	for (var i = 0; i < 6; i++) {
@@ -48,6 +54,25 @@
 			  	}
 			  	var studioPieChart = new PieChart(studios);
 			  	studioPieChart.draw();
+
+			  	//staff pie chart
+			  	var staff = [];
+			  	var orderedStaff = Stats.getSortedMap("staff");
+			  	for (var i = 0; i < 6; i++) {
+			  		staff.push({label: formatStaffName(Stats.staffNamesMap.get(orderedStaff[i][0])), value: orderedStaff[i][1]});
+			  	}
+			  	var staffPieChart = new PieChart(staff);
+			  	staffPieChart.draw();
+
+			  	//genre pie chart
+			  	var genre = [];
+			  	var orderedGenre = Stats.getSortedMap("genres");
+			  	for (var i = 0; i < 6; i++) {
+			  		genre.push({label: orderedGenre[i][0], value: orderedGenre[i][1]});
+			  	}
+			  	var genrePieChart = new PieChart(genre);
+			  	genrePieChart.draw();
+
 			  });
 			  event.preventDefault();
 			});
