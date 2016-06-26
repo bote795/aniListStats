@@ -46,8 +46,8 @@
 			  	for (var i = 0; i < 6; i++) {
 			  		studios.push({label: Stats.studiosNamesMap.get(orderedStudios[i][0] ).studio_name, value: orderedStudios[i][1]});
 			  	}
-			  	PieChart.setData(studios);
-			  	PieChart.draw();
+			  	var studioPieChart = new PieChart(studios);
+			  	studioPieChart.draw();
 			  });
 			  event.preventDefault();
 			});
