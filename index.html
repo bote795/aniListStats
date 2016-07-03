@@ -16,67 +16,74 @@
 			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 	</head>
-	<body>
+	<body ng-app="app" ng-controller="viewCtrl as  vm">
 		<h1 class="text-center">anilist stat viewer</h1>
 		<div class="row">
 			<div class="col-md-offset-4 col-md-4">
 				<div class="form-group">
 					<label class="sr-only" for="">User Name</label>
-					<input type="text" name="" id="username" class="form-control" placeholder="user name" required="required">
+					<input type="text" name="" ng-model="vm.form.username" id="username" class="form-control" placeholder="user name" required="required">
 				</div>		
-			<button id="target" type="submit" class="btn btn-primary">Submit</button>
+			<button ng-click="vm.request(vm.form.username)" id="target" type="submit" class="btn btn-primary">Submit</button>
 			</div>
 		</div>
-		<div id="chart"></div>
+
+	    <table class="table table-striped table-hover" ng-show="vm.studios.length >1">
+			<thead><!-- thead -->
+				<tr>
+				  <th>Studio Name</th>
+				  <th>Frequency</th>
+				</tr>
+			</thead><!--end thead -->
+			<tbody><!-- tbody -->
+				<tr ng-repeat="studio in vm.studios" >
+					<td>{{studio.label}}</td>
+					<td>{{studio.role}}</td>
+					<td>{{studio.value}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+	    <table class="table table-striped table-hover" ng-show="vm.genre.length >1">
+			<thead><!-- thead -->
+				<tr>
+				  <th>Genre Name</th>
+				  <th>Frequency</th>
+				</tr>
+			</thead><!--end thead -->
+			<tbody><!-- tbody -->
+				<tr ng-repeat="genre in vm.genre" >
+					<td>{{genre.label}}</td>
+					<td>{{genre.value}}</td>
+				</tr>
+			</tbody>
+		</table>
+	    <table class="table table-striped table-hover" ng-show="vm.staff.length >1">
+			<thead><!-- thead -->
+				<tr>
+				  <th>Staff Name</th>
+				  <th>Frequency</th>
+				</tr>
+			</thead><!--end thead -->
+			<tbody><!-- tbody -->
+				<tr ng-repeat="staff in vm.staff" >
+					<td>{{staff.label}}</td>
+					<td>{{staff.value}}</td>
+				</tr>
+			</tbody>
+		</table>
 		<!-- jQuery -->
 		<script src="http://code.jquery.com/jquery.js"></script>
 		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+		<script src="app.js"></script>
+		<script src="viewCtrl.js"></script>
 		<script src="auth.js"></script>
 		<script src="StorageHelper.js"></script>
 		<script src="User.js"></script>
 		<script src="Stats.js"></script>
 		<script src="PieChart.js"></script>
 		<script src="bundle.js"></script>
-		<script type="text/javascript">
-			function formatStaffName(item)
-			{
-				return item.name_first + " " + item.name_last; //+"  :\n "+ item.role;
-			}
-			$( "#target" ).click(function( event ) {
-			  var username = $("#username").val();
-			  window.anime(username).then(function(){
-
-			  	//studio pie Chart
-			  	var studios = [];
-			  	var orderedStudios = Stats.getSortedMap("studio");
-			  	for (var i = 0; i < 6; i++) {
-			  		studios.push({label: Stats.studiosNamesMap.get(orderedStudios[i][0] ).studio_name, value: orderedStudios[i][1]});
-			  	}
-			  	var studioPieChart = new PieChart(studios);
-			  	studioPieChart.draw();
-
-			  	//staff pie chart
-			  	var staff = [];
-			  	var orderedStaff = Stats.getSortedMap("staff");
-			  	for (var i = 0; i < 6; i++) {
-			  		staff.push({label: formatStaffName(Stats.staffNamesMap.get(orderedStaff[i][0])), value: orderedStaff[i][1]});
-			  	}
-			  	var staffPieChart = new PieChart(staff);
-			  	staffPieChart.draw();
-
-			  	//genre pie chart
-			  	var genre = [];
-			  	var orderedGenre = Stats.getSortedMap("genres");
-			  	for (var i = 0; i < 6; i++) {
-			  		genre.push({label: orderedGenre[i][0], value: orderedGenre[i][1]});
-			  	}
-			  	var genrePieChart = new PieChart(genre);
-			  	genrePieChart.draw();
-
-			  });
-			  event.preventDefault();
-			});
-		</script>
 		<!-- Bootstrap JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	</body>
