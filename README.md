@@ -12,6 +12,8 @@ retrieve anime stats.
 * anilist.co api
 * browserify
 * angular
+* datatables
+* bootstrap
 
 ##LiveProject
 
