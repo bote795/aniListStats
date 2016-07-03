@@ -12,7 +12,9 @@
 			}
 			vm.request = function(username)
 			{
-				
+				vm.studios=[];
+				vm.staff = [];
+				vm.genre = [];
 			  	window.anime(username).then(function(){
 				  	//studio pie Chart
 				  	var orderedStudios = Stats.getSortedMap("studio");
@@ -24,7 +26,7 @@
 				  	//staff pie chart
 				  	var orderedStaff = Stats.getSortedMap("staff");
 				  	for (var i = 0; i < 6; i++) {
-				  		vm.staff.push({label: formatStaffName(Stats.staffNamesMap.get(orderedStaff[i][0])), value: orderedStaff[i][1], role:  orderedStaff[i][2]});
+				  		vm.staff.push({label: formatStaffName(Stats.staffNamesMap.get(orderedStaff[i][0])), value: orderedStaff[i][1], role:  Stats.staffNamesMap.get(orderedStaff[i][0]).role});
 				  	}
 
 				  	var orderedGenre = Stats.getSortedMap("genres");
